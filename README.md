@@ -15,7 +15,7 @@ NodeJS
 
     git clone https://github.com/MrYakobo/bildsystemet
     cd bildsystemet
-    npm install
+    npm install -g
 
 Lägg in din databasinformation i `setup/db-info.sample.json`, och döp om filen till `db-info.json`.
 

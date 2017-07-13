@@ -3,10 +3,10 @@
 
 <head>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>-->
-    <link rel="stylesheet" href="helpers/bower_components/materialize/bin/materialize.css">
+    <link rel="stylesheet" href="../node_modules/materialize-css/dist/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="helpers/bower_components/moment/moment.js"></script>
+    <script src="../node_modules/moment/moment.js"></script>
     <link rel="icon" href="helpers/favicon.png">
     <meta charset="utf-8">
     <title>Hitta bilder!</title>
@@ -162,7 +162,7 @@
 </head>
 
 <body class="container center-align teal lighten-2 white-text" ng-app="myApp" ng-controller="myCtrl">
-    <div class="bg"><img src="helpers/montage.jpg"></div>
+    <div class="bg"><img src="montage.jpg"></div>
     <div class="card-panel blue-text" style="position:absolute; top: 0; right: 0;">
         <i class="material-icons random" onclick="$.get('montageGen',()=>{console.log('Done'); setTimeout(()=>{ $('.bg img').attr('src','helpers/montage.jpg?q=' + Math.random())}, 3000) })">cached</i>
         <p style="margin: auto;">Slumpa bakgrundsbilden</p>
@@ -303,11 +303,11 @@
         </div>
     </div>
 </body>
-<script src="helpers/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="helpers/bower_components/materialize/bin/materialize.js"></script>
-<script src="helpers/bower_components/squel/dist/squel.min.js"></script>
-<script src="helpers/bower_components/angular/angular.min.js"></script>
-<script src="helpers/angular.js"></script>
+<script src="../node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../node_modules/materialize/bin/materialize.js"></script>
+<script src="../node_modules/squel/dist/squel.min.js"></script>
+<script src="../node_modules/angular/angular.min.js"></script>
+<script src="main.js"></script>
 <script>
     function clearStars(This) {
         $(This).siblings().attr('filled', 'false');
