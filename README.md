@@ -17,7 +17,7 @@ NodeJS
     cd bildsystemet
     npm install -g
 
-Lägg in din databasinformation i `setup/db-info.sample.json`, och döp om filen till `db-info.json`.
+Lägg in din databasinformation i `setup/info.sample.json`, och döp om filen till `info.json`.
 
 ---
 
@@ -27,4 +27,5 @@ Indexering:
 
 Kolla på bilderna:
 
-    node app
+    cd /path/to/images
+    bildsystemet

@@ -38,19 +38,17 @@ function montage(filename) {
                 s += JSON.stringify(o) + " ";
             })
             //s += `-geometry +0+0 -background white ${filename}`;
-		//-geometry +0+0 -crop 600x900
+            //-geometry +0+0 -crop 600x900
             s += `-geometry 650x650+0+0 -background white ${filename}`;
             console.log(s);
             exec(s, (err, stdout, stderr) => {
                 if (err) throw err;
                 if (stderr) throw stderr;
-		console.log(stdout);
+                console.log(stdout);
             })
-	})
+        })
+    }
 }
-}
-
-// montage("helpers\\bgmontage.jpg");
 
 function send(ws, type, content) {
     ws.send(JSON.stringify({

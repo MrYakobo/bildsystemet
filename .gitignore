@@ -1,4 +1,3 @@
 node_modules
-helpers/bower_components
-setup/db-info.json
+setup/info.json
 test
