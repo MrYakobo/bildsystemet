@@ -6,12 +6,12 @@ Välkommen till mitt livslånga projekt som aldrig blir färdigt! Här används 
 
 Tanken med projektet är att man ska kunna ha ett bra alternativ till andra bildsystem.
 
-::Dependencies::
+## ::Dependencies::
 
 PostgreSQL
 NodeJS
 
-::Installation::
+## ::Installation::
 
     git clone https://github.com/MrYakobo/bildsystemet
     cd bildsystemet
