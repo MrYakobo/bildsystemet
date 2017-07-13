@@ -1,0 +1,25 @@
+{
+  "name": "helpers",
+  "authors": [
+    "Jakob Lindskog <jakob.lindskog@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "squel": "^5.5.1",
+    "materialize": "^0.98.0",
+    "angular": "^1.6.1",
+    "five-star-rating": "^1.0.0",
+    "leaflet": "^1.0.3"
+  }
+}

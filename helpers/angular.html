@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>-->
+    <link rel="stylesheet" href="helpers/bower_components/materialize/bin/materialize.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="helpers/bower_components/moment/moment.js"></script>
+    <link rel="icon" href="helpers/favicon.png">
+    <meta charset="utf-8">
+    <title>Hitta bilder!</title>
+    <style>
+        img {
+            border-radius: 6px;
+            margin: 2px;
+            max-width: 350px;
+            max-height: 197px;
+        }
+
+        input[type="checkbox"]+label {
+            vertical-align: middle;
+            margin-left: 9px;
+        }
+
+        .modal {
+            width: 95%;
+            max-height: 94% !important;
+            overflow-x: hidden;
+            top: 63px !important;
+        }
+
+        .tabs~div {
+            margin-top: 20px;
+            min-height: 200px !important;
+        }
+
+        .jakobcard {
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px auto;
+            width: 100%;
+            box-shadow: 0px 3px 2px rgba(0, 0, 0, .2);
+            transform: translateY(-28%);
+        }
+
+        h4 i {
+            font-size: inherit !important;
+            vertical-align: middle;
+        }
+
+        .label {
+            /*color: #000;*/
+            font-size: 1.1em;
+            margin: auto;
+            margin-bottom: 4px;
+            cursor: pointer;
+        }
+
+        .label:hover {
+            text-decoration: underline;
+        }
+
+        #tabs-swipe-demo {
+            overflow-x: hidden;
+        }
+
+        nav .btn-large i {
+            width: 30px;
+            font-size: 2em;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        nav {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 9999 !important;
+            transform: translateY(-250%);
+            /*transition-timing-function: linear;*/
+        }
+
+        .ng-hide-animate {
+            transition-duration: .5s !important;
+        }
+
+        .btn-large.ng-hide {
+            opacity: 0;
+        }
+
+        nav:not(.ng-hide) {
+            transform: translateY(0) !important;
+        }
+
+        .star {
+            color: #000;
+            cursor: pointer;
+            transition-duration: .2s;
+            vertical-align: middle;
+        }
+
+        .star:hover {
+            color: #ff0;
+        }
+
+        .star:hover:before,
+        .star[filled="true"]:before {
+            content: 'star';
+            color: #fdff22;
+            position: absolute;
+            font-family: 'Material Icons';
+            text-shadow: 0px 0px 10px #e7ff00;
+            transition-duration: .2s;
+        }
+
+        .star:active:before {
+            transform: scale(1.2);
+            color: #fcf732;
+        }
+
+        .material-icons {
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        .clear {
+            cursor: pointer;
+            color: #c7c8c9;
+        }
+
+        .bg {
+            z-index: -1;
+            filter: blur(3px);
+            width: 110%;
+            height: 100%;
+            position: absolute;
+            top: -20%;
+            left: -10%;
+        }
+
+        .bg img {
+            max-width: none;
+            max-height: none;
+            margin: 0;
+            width: 100%;
+        }
+
+        .random {
+            transition-duration: .25s;
+            transform-origin: center;
+        }
+
+        .random:hover {
+            transform: rotate(-180deg);
+        }
+
+        .random:active {
+            transform: rotate(-360deg) scale(1.5);
+        }
+    </style>
+</head>
+
+<body class="container center-align teal lighten-2 white-text" ng-app="myApp" ng-controller="myCtrl">
+    <div class="bg"><img src="helpers/montage.jpg"></div>
+    <div class="card-panel blue-text" style="position:absolute; top: 0; right: 0;">
+        <i class="material-icons random" onclick="$.get('montageGen',()=>{console.log('Done'); setTimeout(()=>{ $('.bg img').attr('src','helpers/montage.jpg?q=' + Math.random())}, 3000) })">cached</i>
+        <p style="margin: auto;">Slumpa bakgrundsbilden</p>
+        <p style="font-size: .75em;margin: auto; color: #ccc;">(tar typ 3 sekunder)</p>
+    </div>
+    <h1>Hitta bilder!</h1>
+    <div class="row">
+        <div class="col s12 l6 offset-l3">
+            <p class="card-panel blue-text"><i class="material-icons" style="vertical-align: top;">info</i> Just nu finns det <span style="font-weight: 600; font-size: 1.1em;">{{count}}</span>                bilder i databasen som du kan söka på.</p>
+        </div>
+    </div>
+    <div class="card-panel white black-text">
+        <h4>Inställningar</h4>
+        <div class="row">
+            <div class="col s12">
+                <ul id="tabs-swipe-demo" class="tabs">
+                    <li class="tab col s4"><a href="#test-swipe-1">Datumrelaterat</a></li>
+                    <li class="tab col s4"><a href="#test-swipe-2">Kamerainställningar</a></li>
+                    <li class="tab col s4"><a href="#test-swipe-3">Resultat</a></li>
+                </ul>
+                <div id="test-swipe-1" class="col s12">
+                    <div class="row">
+                        <div class="card-panel col s12 l8">
+                            <h5>Veckodagar</h5>
+                            <div class="row">
+                                <span ng-repeat="(key, day) in weekdays">
+                                    <input ng-disabled="props.date0 != '' || props.date1 != ''" type="checkbox" class="filled-in" id="{{day}}" ng-model="props.weekdays[(key+1)%7]"><label for="{{day}}">{{day}}</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-panel col s12 l4">
+                            <h5>Årstid</h5>
+                            <span ng-repeat="(key, season) in seasons">
+                                <input ng-disabled="props.date0 != '' || props.date1 != ''" type="checkbox" class="filled-in" id="{{season}}" ng-model="props.seasons[key]"><label for="{{season}}">{{season}}</label>
+                            </span>
+                        </div>
+                    </div>
+                    <!--DEBUGGING ANGULAR OBJECTS-->
+                    <!--
+		    <div class="card-panel">
+                        <ul ng-repeat="(key,val) in props">
+                            <li>{{key}}:{{val}}</li>
+                        </ul>
+                    </div>
+		    -->
+                    <div class="row">
+                        <div class="col s12">
+                            <span>Från </span>
+                            <a class='dropdown-button btn green accent-3 waves-effect waves-green' href='#' data-activates='dropdown1' ng-bind="props.year0"
+                                ng-disabled="props.date0 != '' || props.date1 != ''"></a>
+                            <span>till </span>
+                            <a class='dropdown-button btn blue accent-3 waves-effect waves-blue' href='#' data-activates='dropdown2' ng-bind="props.year1"
+                                ng-disabled="props.date0 != '' || props.date1 != ''"></a>
+                            <!-- Dropdown Structure -->
+                            <ul id='dropdown1' class='dropdown-content'>
+                                <li><span ng-click="props.year0 = 'Alla år'">Alla år</span></li>
+                                <li class="divider"></li>
+                                <li ng-repeat="year in years"><span ng-click="props.year0 = year">{{year}}</span></li>
+                            </ul>
+                            <ul id='dropdown2' class='dropdown-content'>
+                                <li><span ng-click="props.year1 = 'Alla år'">Alla år</span></li>
+                                <li class="divider"></li>
+                                <li ng-repeat="year in years"><span ng-click="props.year1 = year">{{year}}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="test-swipe-2" class="col s12">
+                    <h5>Kameramodeller</h5>
+                    <div ng-repeat="value in cameras" ng-if="value.model!=null" class="col s12 l2 left-align">
+                        <input class="with-gap" name="cameraGroup" type="radio" id="{{value.model}}" ng-click="setCamera(value.model)">
+                        <label for="{{value.model}}">{{value.model}}<br>({{value.amount}} bilder)</label>
+                    </div>
+                    <p>
+                        <input class="with-gap" name="cameraGroup" type="radio" id="noCamera" ng-click="setCamera(null)" checked>
+                        <label for="noCamera">Alla kameror</label>
+                    </p>
+                </div>
+                <div id="test-swipe-3" class="col s12">
+                    <input type="checkbox" class="filled-in" id="random" ng-model="props.random"><label for="random">Slumpa ordning på bilderna?</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="card-panel blue-text">
+        <p>
+            <i class="material-icons" style="vertical-align: middle">info_outline</i> Din sökning matchar <span style="font-weight: 600; font-size: 1.1em;">{{queryRows}}</span>            bilder.
+        </p>
+        <div class="card-panel">
+            <p>&nbsp;{{starString()}}</p>
+            <div>
+                <i class="material-icons clear" onclick="clearStars(this)">clear</i>
+                <i class='material-icons star' filled='false' onclick="rating(this)">star_border</i>
+                <i class='material-icons star' filled='false' onclick="rating(this)">star_border</i>
+                <i class='material-icons star' filled='false' onclick="rating(this)">star_border</i>
+                <i class='material-icons star' filled='false' onclick="rating(this)">star_border</i>
+                <i class='material-icons star' filled='false' onclick="rating(this)">star_border</i>
+            </div>
+        </div>
+        <button class="waves-effect waves-blue btn-large green" ng-click="props.page = 1;query();showingModal=true;" data-target="modal1"><i class="material-icons" style="vertical-align: middle">camera_roll</i> Visa bilderna!</button>&nbsp;
+        <!--<i class='material-icons star' style="vertical-align:middle" filled='false' onclick="$(this).attr('filled',function(_, attr){ var s = $($(this).parent().prev('a')[0]).attr('data-id'); var r = $(this).attr('filled'); var newAttr = !(attr == 'true'); var scope = getScope(); scope.safeApply(()=>{scope.props.star = newAttr}); return newAttr; })" id="star">star_border</i>-->
+    </div>
+    <!--<div class="card-panel black-text">
+        <h4><i class="material-icons">arrow_downward</i> Tekniska detaljer (sånt som Jakob kan läsa) <i class="material-icons">arrow_downward</i></h4>
+        <h6 class="card-panel blue darken-1 white-text">{{sql}}</h6>
+    </div>-->
+    <nav ng-show="showingModal" class="blue lighten-2 navbar-fixed ng-hide-animate ng-hide">
+        <div class="row">
+            <div class="col s4">
+                <div class="blue white-text btn-large waves-effect waves-blue ng-hide-animate" ng-click="deltaPage(-1);" ng-show="queryRows>imagesperpage && props.page != 0">
+                    <i class="material-icons">arrow_backward</i>
+                    <span>{{imagesperpage}} bilder</span>
+                </div>
+            </div>
+            <div ng-if="queryRows>imagesperpage" class="col s4">
+                <div class="jakobcard white">
+                    <h5 class="blue-text">Sida
+                        <input type="number" style="width:90px;font-size: .9em;" ng-model="props.page" max="{{totalPages}}" ng-change="nav()" min="1">                        av {{totalPages}}</h5>
+                </div>
+                <!--<div class="yellow card-panel"></div>-->
+            </div>
+            <div class="col s4">
+                <div class="blue white-text btn-large waves-effect waves-blue ng-hide-animate" ng-click="deltaPage(1);" ng-show="queryRows>imagesperpage && props.page != totalPages">
+                    <span>{{imagesperpage}} bilder</span>
+                    <i class="material-icons">arrow_forward</i>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <div class="row">
+                <div class="col s12">
+                    <div id="res" ng-bind-html="res | unsafe"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="helpers/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="helpers/bower_components/materialize/bin/materialize.js"></script>
+<script src="helpers/bower_components/squel/dist/squel.min.js"></script>
+<script src="helpers/bower_components/angular/angular.min.js"></script>
+<script src="helpers/angular.js"></script>
+<script>
+    function clearStars(This) {
+        $(This).siblings().attr('filled', 'false');
+        var scope = getScope();
+        scope.safeApply(() => {
+            scope.props.star = 0;
+        });
+    }
+
+    function photoClearStars(This) {
+        $(This).siblings().attr('filled', 'false');
+        var s = $($(This).parent().prev("a")[0]).attr("data-id");
+        send('rating', {
+            id: s,
+            rating: 0
+        });
+    }
+
+    function toggleStar(This) {
+        $(This).attr('filled', function (_, attr) {
+            var newAttr = !(attr == 'true');
+            return newAttr;
+        })
+    }
+
+    function rating(This) {
+        var rating = $(This).index();
+        var arr = $(This).parent().children();
+
+        for (var i = 0; i < arr.length; i++) {
+            $(arr[i]).attr("filled", i <= rating ? 'true' : 'false');
+        }
+        var scope = getScope();
+        scope.safeApply(() => {
+            scope.props.star = rating;
+        });
+    }
+
+    function photoRating(This) {
+        var rating = $(This).index();
+        var arr = $(This).parent().children();
+        var s = $($(This).parent().prev("a")[0]).attr("data-id");
+
+        for (var i = 0; i < arr.length; i++) {
+            $(arr[i]).attr("filled", i <= rating ? 'true' : 'false');
+        }
+        //send to server
+        send("rating", {
+            rating: rating,
+            id: s
+        });
+    }
+</script>
+
+</html>
